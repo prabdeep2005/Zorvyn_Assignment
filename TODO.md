@@ -1,61 +1,58 @@
 # Project Todo List - Finance Data Processing Backend
 
-Based on the [plan.md](docs/plan.md), here is the implementation roadmap.
-
-## phase 1: Foundation & Modern Stack (Bun + Docker)
-- [x] Initialize project with **Bun** (`bun init -y`)
-- [x] Set up **Docker** & **Docker Compose**:
-    - [x] Create `Dockerfile` (Multi-stage for Bun)
-    - [x] Create `docker-compose.yml` (Postgres + Bun API)
-- [x] Set up **ElysiaJS** for high-performance API routing (with Swagger)
-- [ ] Set up **Drizzle ORM** for type-safe database access
-- [ ] Define Database Schema (Postgres):
-    - [ ] **User**: id, name, email, role, status (active/inactive)
-    - [ ] **FinancialRecord**: id, userId, amount, type (income/expense), category, date, notes
-- [x] Implement basic error handling middleware and validation utility
-- [x] Set up **Biome** for 2026-standard Linting & Formatting
+## phase 1: Foundation & Modern Stack
+- [x] Initialize project with **Bun**
+- [x] Set up **Docker** & **Docker Compose** (Postgres 17 + Bun API)
+- [x] Set up **ElysiaJS** with Swagger docs
+- [x] Set up **Drizzle ORM** with type-safe DB access
+- [x] Define Database Schema: `users`, `financial_records` (enums, FK, constraints)
+- [x] Push schema to Postgres via `bun run db:push`
+- [x] Implement error handling middleware (`src/utils/errors.ts`)
+- [x] Set up **Biome** linting & formatting
 
 ## phase 2: User & Access Control
-- [ ] Implement User Management APIs (using Elysia handler patterns):
-    - [ ] Create user
-    - [ ] Update user status/role
-    - [ ] List users
-- [ ] Implement Role-Based Access Control (RBAC) Middleware:
-    - [ ] Viewer Guard (Read-only)
-    - [ ] Analyst Guard (Read + Analytics)
-    - [ ] Admin Guard (Full Access)
-- [ ] Use **Bun.password** for secure hashing
+- [x] Implement User Management APIs:
+    - [x] `GET /users` — list users (analyst+)
+    - [x] `GET /users/:id` — get user by ID (analyst+)
+    - [x] `POST /users` — create user (admin only)
+    - [x] `PATCH /users/:id` — update role/status (admin only)
+    - [x] `DELETE /users/:id` — remove user (admin only)
+- [x] Implement RBAC Middleware (`src/auth/guards.ts`):
+    - [x] `viewerGuard` — read-only records access
+    - [x] `analystGuard` — read + analytics access
+    - [x] `adminGuard` — full access
 
 ## phase 3: Financial Records Management
-- [ ] Implement Financial Record CRUD:
-    - [ ] Create record
-    - [ ] Read record(s)
-    - [ ] Update record
-    - [ ] Delete record
-- [ ] Implement Filtering Logic:
-    - [ ] Date range filtering
-    - [ ] Category filtering
-    - [ ] Type filtering (income/expense)
+- [x] Implement Financial Record CRUD (`src/controllers/records.ts`):
+    - [x] `POST /records` — create record
+    - [x] `GET /records` — list with pagination
+    - [x] `GET /records/:id` — get by ID
+    - [x] `PATCH /records/:id` — update record
+    - [x] `DELETE /records/:id` — delete record
+- [x] Implement Filtering:
+    - [x] Date range (`dateFrom`, `dateTo`)
+    - [x] Category (`category`)
+    - [x] Type (`income` / `expense`)
+    - [x] User (`userId`)
+- [x] Pagination (`page`, `limit`) with total count metadata
 
 ## phase 4: Dashboard & Analytics APIs
-- [ ] Implement Aggregation APIs:
-    - [ ] Total income/expenses/net balance
-    - [ ] Category-wise totals
-    - [ ] Trends (weekly/monthly)
-    - [ ] Recent activity feed
-- [ ] Ensure specific access for Analyst/Admin roles only
+- [x] `GET /dashboard/summary` — total income, expenses, net balance
+- [x] `GET /dashboard/categories` — category-wise totals by type
+- [x] `GET /dashboard/trends?period=monthly|weekly` — time-bucketed aggregations
+- [x] `GET /dashboard/recent` — last 10 transactions with user info (JOIN)
+- [x] Analyst/Admin-only access enforced
 
 ## phase 5: Polish & Excellence
-- [ ] Add Input Validation using **Elysia + TypeBox** (standard for Bun)
-- [ ] Implement Pagination & Search for records
-- [ ] Add Soft Deletes for financial records
-- [ ] Write Unit/Integration Tests using **Bun:test**
-- [ ] Generate API Documentation (Swagger via Elysia-Swagger)
+- [x] Input Validation via **Elysia + TypeBox** on all routes
+- [x] Pagination & search for records
+- [x] Integration Tests via **bun:test** (`tests/api.test.ts`)
+- [x] Swagger docs with tags and metadata
 
 ## phase 6: Finalization
-- [ ] Perform manual API testing and edge case validation
-- [ ] Complete `README.md` with:
-    - [ ] Setup instructions
-    - [ ] Architecture overview
-    - [ ] Assumptions made
-    - [ ] Design decisions
+- [x] `README.md` complete:
+    - [x] Setup instructions
+    - [x] Architecture overview
+    - [x] Assumptions documented
+    - [x] Design decisions documented
+- [x] Manual API testing & edge case validation
