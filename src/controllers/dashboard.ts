@@ -60,14 +60,26 @@ export const dashboardController = new Elysia({ prefix: "/dashboard" })
 
 			const result = await db
 				.select({
-					period: sql<string>`to_char(date_trunc(${period}, date), 'YYYY-MM-DD')`,
+					period:
+						period === "week"
+							? sql<string>`to_char(date_trunc('week', date), 'YYYY-MM-DD')`
+							: sql<string>`to_char(date_trunc('month', date), 'YYYY-MM-DD')`,
 					type: financialRecords.type,
 					total: sql<number>`sum(amount::numeric)`,
 					count: sql<number>`count(*)::int`,
 				})
 				.from(financialRecords)
-				.groupBy(sql`date_trunc(${period}, date)`, financialRecords.type)
-				.orderBy(sql`date_trunc(${period}, date) desc`)
+				.groupBy(
+					period === "week"
+						? sql`date_trunc('week', date)`
+						: sql`date_trunc('month', date)`,
+					financialRecords.type,
+				)
+				.orderBy(
+					period === "week"
+						? sql`date_trunc('week', date) desc`
+						: sql`date_trunc('month', date) desc`,
+				)
 				.limit(24); // last 24 periods
 
 			return { success: true, data: result };
