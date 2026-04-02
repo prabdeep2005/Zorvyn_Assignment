@@ -116,29 +116,6 @@ All protected routes require the `x-user-role` header (mock auth — see [Assump
 
 ---
 
-## Architecture
-
-```
-src/
-├── index.ts              # App entry point — wires all controllers
-├── auth/
-│   └── guards.ts         # RBAC middleware (viewerGuard, analystGuard, adminGuard)
-├── controllers/
-│   ├── user.ts           # User management endpoints
-│   ├── records.ts        # Financial record CRUD + filtering
-│   └── dashboard.ts      # Analytics & aggregation endpoints
-├── db/
-│   ├── index.ts          # Drizzle + pg Pool connection
-│   ├── schema.ts         # Table definitions (users, financial_records)
-│   └── migrations/       # Generated migration files
-└── utils/
-    └── errors.ts         # Centralized error handler middleware
-tests/
-└── api.test.ts           # Integration tests (bun:test)
-```
-
----
-
 ## Running Tests
 
 > Requires the server to be running on port 3000 with a connected DB.
@@ -170,3 +147,4 @@ bun test
 - **Drizzle over Prisma**: Lighter weight, generates plain SQL, and has better compatibility with Bun's module system.
 - **`x-user-role` guard pattern**: Keeps the `roleGuard` reusable as a plain object spread, compatible with how ElysiaJS merges options.
 - **Pagination on records**: Prevents large table scans — default 20 records per page.
+- **Schema Push (Zero Migrations)**: Used `drizzle-kit push` for straightforward schema synchronization during the development phase, as allowed by the flexible assignment requirements.
