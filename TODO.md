@@ -3,16 +3,17 @@
 Based on the [plan.md](docs/plan.md), here is the implementation roadmap.
 
 ## phase 1: Foundation & Modern Stack (Bun + Docker)
-- [ ] Initialize project with **Bun** (`bun init -y`)
-- [ ] Set up **Docker** & **Docker Compose**:
-    - [ ] Create `Dockerfile` (Multi-stage for Bun)
-    - [ ] Create `docker-compose.yml` (Postgres + Bun API)
-- [ ] Set up **ElysiaJS** for high-performance API routing
+- [x] Initialize project with **Bun** (`bun init -y`)
+- [x] Set up **Docker** & **Docker Compose**:
+    - [x] Create `Dockerfile` (Multi-stage for Bun)
+    - [x] Create `docker-compose.yml` (Postgres + Bun API)
+- [x] Set up **ElysiaJS** for high-performance API routing (with Swagger)
 - [ ] Set up **Drizzle ORM** for type-safe database access
 - [ ] Define Database Schema (Postgres):
     - [ ] **User**: id, name, email, role, status (active/inactive)
     - [ ] **FinancialRecord**: id, userId, amount, type (income/expense), category, date, notes
-- [ ] Implement basic error handling middleware and validation utility
+- [x] Implement basic error handling middleware and validation utility
+- [x] Set up **Biome** for 2026-standard Linting & Formatting
 
 ## phase 2: User & Access Control
 - [ ] Implement User Management APIs (using Elysia handler patterns):
